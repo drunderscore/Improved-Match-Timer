@@ -27,6 +27,7 @@ ConVar mp_timelimit_improved_visibility;
 ConVar mp_roundtime;
 ConVar round_time_override;
 ConVar sm_improvedtimers_chat;
+ConVar mp_timelimit_overtime;
 
 public Plugin myinfo =
 {
@@ -44,6 +45,7 @@ public void OnPluginStart()
 	mp_roundtime					 = CreateConVar("mp_roundtime", "-1", "The length (in seconds) of the round timer on 5CP and KOTH. -1 Default gametype behavior (default)", FCVAR_NONE, true, -1.0, false);
 	round_time_override				 = CreateConVar("round_time_override", "-1", "The length (in seconds) of the round timer on 5CP and KOTH. -1 Default gametype behavior (default)", FCVAR_NONE, true, -1.0, false);
 	sm_improvedtimers_chat			 = CreateConVar("sm_improvedtimers_chat", "1", "If 1, prints timer related notifications to chat.", FCVAR_NONE, true, 0.0, true, 0.0);
+	mp_timelimit_overtime			 = CreateConVar("mp_timelimit_overtime", "0", "The length (in seconds) for the map timer on 5CP once the time limit has been reached.", FCVAR_NONE, true, 0.0, false);
 	cvar_timelimit					 = FindConVar("mp_timelimit");
 	cvar_restartgame				 = FindConVar("mp_restartgame");
 	cvar_winlimit					 = FindConVar("mp_winlimit");
@@ -155,7 +157,7 @@ public Action CheckRoundTime(Handle timer)
 	lastTimeReported = timeleft;
 	if (timeleft <= 1)
 	{
-		ServerCommand("mp_timelimit 0");
+		ServerCommand("mp_timelimit %d", mp_timelimit_overtime.IntValue);
 		int newRoundLimit = GetTeamScore(3) + 1;
 		if (GetTeamScore(2) + 1 > GetTeamScore(3) + 1) newRoundLimit = GetTeamScore(2) + 1;
 		if (newRoundLimit > 5) newRoundLimit = 5;
@@ -179,7 +181,7 @@ public Action CheckRoundTime(Handle timer)
 	}
 	if ((GetTeamScore(2) >= 4 || GetTeamScore(3) >= 4) && mp_timelimit_improved_visibility.BoolValue)
 	{
-		ServerCommand("mp_timelimit 0");
+		ServerCommand("mp_timelimit %d", mp_timelimit_overtime.IntValue);
 		for (int client = 1; client <= MAXPLAYERS; client++)
 		{
 			if (IsValidClient(client))
