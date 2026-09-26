@@ -25,3 +25,4 @@ The Progressive Ruleset ("Pro Ruleset" for short) incorporates this plugin that 
 
  sm_improvedtimers_chat: If 1 (default), prints timer related notifications to chat.
 
+ mp_timelimit_overtime: Changes the length (in minutes) of the map timer on 5CP once the time limit has been reached. 0 (default) means infinite.
